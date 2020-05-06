@@ -1,0 +1,7 @@
+#include<stdio.h>
+int main(){
+	printf("本次用于测试");
+	return 0;  
+} 
+
+
