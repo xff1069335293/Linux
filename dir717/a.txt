@@ -1,0 +1,20 @@
+总用量 72
+-rw-rw-r-- 1 xff xff    0 7月  19 01:05 a.txt
+-rwxrwxr-x 1 xff xff 8736 7月   8 08:23 file708
+-rwxrwxr-x 1 xff xff 8488 7月   9 23:41 file709
+-rwxrwxr-x 1 xff xff 8568 7月  17 21:53 fork
+-rwxr-xr-x 1 xff xff 8632 7月  17 00:36 minishell
+-rwxrwxr-x 1 xff xff 9136 7月  19 01:04 minishellc
+-rw-rw-r-- 1 xff xff  619 7月  17 00:36 minishell.c
+-rw-rw-r-- 1 xff xff 2118 7月  19 01:04 minishell.cc
+-rw-rw-r-- 1 xff xff  457 7月  17 21:54 vfork.c
+总用量 76
+-rw-rw-r-- 1 xff xff  463 7月  19 01:05 a.txt
+-rwxrwxr-x 1 xff xff 8736 7月   8 08:23 file708
+-rwxrwxr-x 1 xff xff 8488 7月   9 23:41 file709
+-rwxrwxr-x 1 xff xff 8568 7月  17 21:53 fork
+-rwxr-xr-x 1 xff xff 8632 7月  17 00:36 minishell
+-rwxrwxr-x 1 xff xff 9136 7月  19 01:04 minishellc
+-rw-rw-r-- 1 xff xff  619 7月  17 00:36 minishell.c
+-rw-rw-r-- 1 xff xff 2118 7月  19 01:04 minishell.cc
+-rw-rw-r-- 1 xff xff  457 7月  17 21:54 vfork.c
