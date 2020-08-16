@@ -34,9 +34,9 @@ typedef struct coroutine{
 //协程管理器
 typedef struct  schedule{
     coroutine_t** coroutines;       //所有协程
-    int current_id;     //当前协程
+    int current_id;     //当前协程id，如果没有正在运行的协程设置为-1
     ucontext_t ctx_main;//主流程上下文
-    size_t max_id;      //最大下标
+    int  max_id;      //最大下标
 }schedule_t;
 
 //初始化协程管理器
@@ -46,12 +46,12 @@ schedule_t* schedule_create();
 int coroutine_create(schedule_t* s, void* (*call_back)(schedule_t*, void* argc),void* argc);
 
 //启动协程
-void coroutine_running(schedule_t* s, int id);
+int coroutine_running(schedule_t* s, int id);
 
 //让出CPU
 void coroutine_yield(schedule_t* s);
 
-//还原
+//还原CPU
 void coroutine_resume(schedule_t* s,int id);
 
 //释放调度器

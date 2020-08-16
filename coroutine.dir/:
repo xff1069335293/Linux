@@ -110,7 +110,7 @@ void* handle(schedule_t* s, void* argc)
     }
 }
 
-int main(void)
+int main()
 {
     int lfd = tcp_init();
     set_nonblock(lfd);
@@ -125,4 +125,5 @@ int main(void)
     accept_conn(lfd,s,co_ids,handle);
 
     schedule_destroy(s);
+    return 0;
 }

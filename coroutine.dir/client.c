@@ -11,7 +11,7 @@ int main()
     int fd = socket(AF_INET, SOCK_STREAM, 0);
     struct sockaddr_in addr;
     addr.sin_family = AF_INET;
-    addr.sin_port = htons(9898);
+    addr.sin_port = htons(9999);
     inet_aton("192.168.140.131",&addr.sin_addr);
     int r = connect(fd, (struct sockaddr*)&addr, sizeof(addr));
     if (r == -1)
@@ -30,4 +30,5 @@ int main()
             break;
         printf("=> %s\n",buf);
     }
+    return 0;
 }
