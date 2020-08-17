@@ -10,6 +10,7 @@ schedule_t* schedule_create()
         memset(s->coroutines,0x00,sizeof(coroutine_t*)*CORSZ);
         s->current_id = -1;
         s->max_id = 0;
+        printf("schedule_create success\n");
     }
     return s;
 }
@@ -18,12 +19,15 @@ schedule_t* schedule_create()
 static void* main_fun(schedule_t* s)
 {
     int id = s->current_id;
+    printf("main_fun -> id = %d\n",id);
     if (id != -1)
     { 
         coroutine_t* c = s->coroutines[s->current_id];
+        printf("main_fun->call_back\n");
         c->call_back(s,c->argc);
         c->state = DEAD;   //目标函数执行完毕
         s->current_id = -1;
+        printf("main_func end\n");
     }   
 }
 
@@ -50,6 +54,7 @@ int coroutine_create(schedule_t* s, void* (*call_back)(schedule_t*, void* argc),
     c->argc = argc;
     c->state = READY;
 
+    printf("coroutine_create success id = %d\n",i);
     getcontext(&c->ctx);            //保存当前上下文信息
     c->ctx.uc_stack.ss_sp = c->stack;//预分配栈空间
     c->ctx.uc_stack.ss_size = STACKSZ;
@@ -70,26 +75,28 @@ static enum States get_state(schedule_t* s, int id)
 }
 
 //启动协程
-int coroutine_running(schedule_t* s, int id)
+void coroutine_running(schedule_t* s, int id)
 {
+    printf("coroutine_running\n");
     int st = get_state(s,id); 
     if (st == DEAD)
         return ;
      coroutine_t* c = s->coroutines[id];
      c->state = RUNNING;
      s->current_id = id;
+     printf("coroutine_running -> (&s->ctx_main,&c->ctx)\n");
     swapcontext(&s->ctx_main,&c->ctx);//保存主线程的上下文信息，切换到当前协程保存的上下文
-    return s->current_id;
 }
-
-
 
 
 //让出CPU
 void coroutine_yield(schedule_t* s)
 {
+    printf("coroutine_yield\n");
+
     if (s->current_id != -1)//有协程运行
     {
+        printf("current_id = %d suspend -> (&c->ctx,&s->ctx_main)\n",s->current_id);
         coroutine_t* c = s->coroutines[s->current_id];
         c->state = SUSPEND;//设置成挂起状态
         s->current_id = -1;
@@ -100,9 +107,11 @@ void coroutine_yield(schedule_t* s)
 //还原CPU
 void coroutine_resume(schedule_t* s,int id)
 {
+    printf("coroutine_resume\n");
     coroutine_t* c = s->coroutines[id];
     if (c != NULL && c->state == SUSPEND)//存在协程，并且状态为挂起状态
     {
+        printf("current_id = %d running -> (&s->ctx_main,&c->ctx)\n",s->current_id);
         c->state = RUNNING;
         s->current_id = id;
         swapcontext(&s->ctx_main,&c->ctx);//将主函数上下文保存，切换到当前协程保存的上下文运行
@@ -129,9 +138,10 @@ void schedule_destroy(schedule_t* s)
         delete_coroutine(s,i);
     }
     free(s->coroutines);
-   // s->coroutines = NULL;
+    s->coroutines = NULL;
     free(s);
-    //s = NULL;
+    s = NULL;
+    printf("schedule_destroy\n");
 }
 
 //判断协程是否运行完毕

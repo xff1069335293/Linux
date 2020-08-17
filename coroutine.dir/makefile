@@ -1,7 +1,7 @@
 CC = gcc
 CFLAG = -g
 OBJS = coroutine.o main.o 
-BIN = coroutine
+BIN = server
 $(BIN):$(OBJS)
 	$(CC) $(CFLAG) $^ -o $@
 %.o:%.c

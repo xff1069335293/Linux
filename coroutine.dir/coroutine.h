@@ -46,7 +46,7 @@ schedule_t* schedule_create();
 int coroutine_create(schedule_t* s, void* (*call_back)(schedule_t*, void* argc),void* argc);
 
 //启动协程
-int coroutine_running(schedule_t* s, int id);
+void  coroutine_running(schedule_t* s, int id);
 
 //让出CPU
 void coroutine_yield(schedule_t* s);
@@ -59,6 +59,5 @@ void schedule_destroy(schedule_t* s);
 
 //判断协程是否运行完毕
 int schedule_finished(schedule_t* s);
-
 
 #endif /*__COROUTINE_H__*/
