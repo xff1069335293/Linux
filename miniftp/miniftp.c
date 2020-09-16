@@ -5,12 +5,25 @@
 //02.28.43
 int main(int argc,char* argv[])
 {
+	//提升权限root运行
+	if (getuid() != 0)
+	{
+		printf("miniftp : must be start as root.\n");
+		exit(EXIT_FAILURE);
+	}
+
 	session_t sess = 
 		{
 		/*控制连接*/
-			-1
+			-1,-1,"","","",
+		/*数据连接*/
+			NULL,-1,-1,
+		/*协议状态*/
+			0,
+		/*父子进程通道*/
+			-1,-1
 		};
-	int listenfd = tcp_server("192.168.140.135",9001);
+	int listenfd = tcp_server("192.168.140.136",9001);
 	
 	struct sockaddr_in addrCli;
 	socklen_t addrlen;
