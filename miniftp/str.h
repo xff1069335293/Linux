@@ -5,6 +5,6 @@
 
 void str_trim_crlf(char *str);//去除末尾回车或者换行符
 void str_split(const char *str,char *left, char *right, char c);
-
+void str_upper(char *str);
 
 #endif	/*_STR_H_*/

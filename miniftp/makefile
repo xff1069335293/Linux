@@ -1,6 +1,6 @@
 CC = gcc
 CFLAG = -g
-OBJS = miniftp.o sysutil.o session.o ftpproto.o privparent.o str.o privsock.o
+OBJS = miniftp.o sysutil.o session.o ftpproto.o privparent.o str.o privsock.o tunable.o parseconf.o hash.o
 LIBS = -lcrypt
 BIN = miniftp 
 $(BIN):$(OBJS)

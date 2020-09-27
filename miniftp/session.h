@@ -12,18 +12,26 @@ typedef struct session
 	char arg[MAX_ARG]; 
 
 	/*数据连接*/
-
 	struct sockaddr_in *port_addr;
 	int data_fd;//主动连接监听套接字
-	
 	int pasv_listen_fd;//被动连接套接字
-
+	int  data_process;//是否处于数据连接
 	/*协议状态*/
-	int is_ascci;//
+	int is_ascii;//
+	char *rnfr_name;//
+	long long restart_pos;
+	unsigned int num_clients;
+	unsigned int num_per_ip;
 	
 	/*父子进程通道*/
 	int parent_fd;
 	int child_fd;
+
+	/* 限速 */
+	unsigned long upload_max_rate;
+	unsigned long download_max_rate;
+	long transfer_start_sec;
+	long transfer_start_usec;
 
 }session_t; 
 

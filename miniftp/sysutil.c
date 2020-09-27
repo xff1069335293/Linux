@@ -1,8 +1,18 @@
 #include "sysutil.h"
 
-#include<netinet/in.h>//地址结构信息
-#include<arpa/inet.h> //字节序转化接口
-#include<sys/socket.h>//套接字接口
+void getlocalip(char *ip)
+{
+	char host[MAX_HOST_NAME_SIZE] = {0};
+	if(gethostname(host, sizeof(host)) < 0)
+		ERR_EXIT("gethostname");
+	printf("host name = %s\n", host);
+	
+	struct hostent *ph;
+	if((ph = gethostbyname(host)) == NULL)
+		ERR_EXIT("gethostbyname");
+
+	strcpy(ip, inet_ntoa(*(struct in_addr*)ph->h_addr));
+}
 
 int tcp_server(const char* host, unsigned short port)
 {
@@ -33,11 +43,26 @@ int tcp_server(const char* host, unsigned short port)
 }
 
 //获取数据连接套接字
-int tcp_client()
+int tcp_client(int port)
 {
 	int sock;
-	if ((sock=socket(AF_INET,SOCK_STREAM,0)) <0)
+	if((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
 		ERR_EXIT("tcp_client");
+
+	if(port > 0)
+	{
+		int on = 1;
+		if(setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &on, sizeof(on)) < 0)
+			ERR_EXIT("setsockopt");
+
+		struct sockaddr_in address;
+		address.sin_family = AF_INET;
+		address.sin_addr.s_addr = INADDR_ANY;
+		address.sin_port = htons(port);
+		if(bind(sock, (struct sockaddr*)&address, sizeof(struct sockaddr)) < 0)
+			ERR_EXIT("bind 20");
+	}
+
 	return sock;
 }
 
@@ -177,4 +202,33 @@ int recv_fd(const int sock_fd)
 		ERR_EXIT("no passed fd");
 
 	return recv_fd;
+}
+
+
+static struct timeval s_cur_time;
+long get_time_sec()
+{
+	if(gettimeofday(&s_cur_time, NULL) < 0)
+		ERR_EXIT("gettimeofday");
+	return s_cur_time.tv_sec;
+}
+long get_time_usec()
+{
+	return s_cur_time.tv_usec;
+}
+
+void nano_sleep(double sleep_time)
+{
+	time_t sec =  (time_t)sleep_time;
+	double decimal = sleep_time - (double)sec;
+
+	struct timespec ts;
+	ts.tv_sec = sec;
+	ts.tv_nsec = (long)(decimal * 1000000000);
+
+	int ret;
+	do
+	{
+		ret = nanosleep(&ts, &ts);
+	}while(ret==-1 && errno==EINTR);  //循环用于预防休眠被信号中断
 }

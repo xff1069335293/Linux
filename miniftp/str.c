@@ -24,3 +24,14 @@ void str_split(const char *str,char *left, char *right, char c)
 		strcpy(right,pos+1);
 	}
 }
+
+//转化为大写
+void str_upper(char *str)
+{
+	while(*str)
+	{
+		if(*str>='a' && *str<='z')
+			*str -= 32;
+		str++;
+	}
+}
